@@ -2,7 +2,9 @@ package com.example.test.classui;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.KeyEvent;
 import android.view.View; // For use of void submit(View view)
+import android.view.inputmethod.EditorInfo;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -10,7 +12,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
-    // ? 根據XML LAYOUT的物件 ID來先行宣告，稍後會於程式碼中取得正確的值!
+    //  根據XML LAYOUT的物件 ID來先行宣告，稍後會於程式碼中取得正確的值!
     TextView textView;
     EditText editText;
     CheckBox checkBox;
@@ -24,6 +26,38 @@ public class MainActivity extends AppCompatActivity {
         // 習慣上，JAVA這邊宣告的物件名稱會故意命名為跟XML的物件ID名稱相同，方便程式開發者了解其對應關係!!!
         textView = (TextView) findViewById(R.id.textView);
         editText = (EditText) findViewById(R.id.editText);
+
+        //設定for 虛擬鍵盤
+        editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    submit(v);
+                    return true;
+                }
+                else
+                    return false;
+            }
+        });
+
+        editText.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                if ((keyCode == KeyEvent.KEYCODE_ENTER) && (event.getAction() == KeyEvent.ACTION_DOWN)) {
+                    submit(v);
+                    return true;
+                }
+                else
+                    return false;
+            }
+        });
+
+
+
+
+
+
+        // 核取方塊 For顯示textView的方式!
         checkBox = (CheckBox) findViewById(R.id.checkBox);
     }
 
