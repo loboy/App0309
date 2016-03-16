@@ -1,11 +1,14 @@
 package com.example.test.classui;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View; // For use of void submit(View view)
 import android.view.inputmethod.EditorInfo;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -17,6 +20,11 @@ public class MainActivity extends AppCompatActivity {
     EditText editText;
     CheckBox checkBox;
 
+    //使用SharedPreferences儲存應用程式的設定值，方便下次啟動時可載入偏好設定
+    SharedPreferences sp;
+    // editor看起來只是個 方便別名...-而已...但是當Mode採用 Context.MODE_PRIVATE，則必須另外宣告 SharedPreferences.Editor物件以 editor來執行Edit編輯介面功能!!! 若是以sp.Editor來執行，則跑不出效果!!!
+    SharedPreferences.Editor editor;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,10 +35,20 @@ public class MainActivity extends AppCompatActivity {
         textView = (TextView) findViewById(R.id.textView);
         editText = (EditText) findViewById(R.id.editText);
 
+        // 核取方塊 For顯示textView的方式!
+        checkBox = (CheckBox) findViewById(R.id.checkBox);
+
+        // SharedPreferences偏好設定檔(自定名稱：setting；模式：應用程式專用)
+        sp = getSharedPreferences("setting", Context.MODE_PRIVATE);
+        editor = sp.edit();
+        // 讓EditText物件editText顯示上次離開時畫面上editText的保存內容
+        editText.setText(sp.getString("editText", ""));
+
         //設定for 虛擬鍵盤
         editText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     submit(v);
                     return true;
@@ -43,6 +61,13 @@ public class MainActivity extends AppCompatActivity {
         editText.setOnKeyListener(new View.OnKeyListener() {
             @Override
             public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+                //在虛擬鍵盤輸入內容時，也順便將該文字方塊內容儲存至SharedPreferences物件sp (for 設定檔setting)
+                // 透過SharedPreferences.Editor 編輯介面putString(String key, String value)
+                editor.putString("editText", editText.getText().toString()); // editor = sp.edit()
+                editor.apply(); // editor = sp.edit()
+
+                // Submit View
                 if ((keyCode == KeyEvent.KEYCODE_ENTER) && (event.getAction() == KeyEvent.ACTION_DOWN)) {
                     submit(v);
                     return true;
@@ -54,11 +79,20 @@ public class MainActivity extends AppCompatActivity {
 
 
 
+        //設定CheckBox狀態顯示 前次執行時最後狀態值，若找無狀態紀錄值則顯示False，
+        //從SharedPreferences物件 以sp.getBoolean("checkBox", false) 取得偏好設定檔setting中所記錄的前次狀態值 key-value pair (key= "checkBox")
+        checkBox.setChecked(sp.getBoolean("checkBox",false));
 
+        //當CheckBox物件checkBox有異動時，將最新的checkBox狀態值存入 偏好設定檔setting中所記錄的前次狀態值 key-value pair (key= "checkBox")
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                //記錄於偏好設定檔setting中 (key= "checkBox")
+                editor.putBoolean("checkBox", checkBox.isChecked()); // editor = sp.edit()
+                editor.apply(); // editor = sp.edit()
+            }
+        });
 
-
-        // 核取方塊 For顯示textView的方式!
-        checkBox = (CheckBox) findViewById(R.id.checkBox);
     }
 
     public void submit(View view)
