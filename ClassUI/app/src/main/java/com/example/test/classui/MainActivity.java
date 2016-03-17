@@ -7,11 +7,15 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View; // For use of void submit(View view)
 import android.view.inputmethod.EditorInfo;
+import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import static com.example.test.classui.Utils.*;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
     // editor看起來只是個 方便別名...-而已...但是當Mode採用 Context.MODE_PRIVATE，則必須另外宣告 SharedPreferences.Editor物件以 editor來執行Edit編輯介面功能!!! 若是以sp.Editor來執行，則跑不出效果!!!
     SharedPreferences.Editor editor;
 
+    ListView historyListView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +43,9 @@ public class MainActivity extends AppCompatActivity {
 
         // 核取方塊 For顯示textView的方式!
         checkBox = (CheckBox) findViewById(R.id.checkBox);
+
+        // For relation with ListView in XML
+        historyListView = (ListView) findViewById(R.id.listView);
 
         // SharedPreferences偏好設定檔(自定名稱：setting；模式：應用程式專用)
         sp = getSharedPreferences("setting", Context.MODE_PRIVATE);
@@ -93,13 +102,15 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //顯示 history.txt的內容於ListView
+        showListView();
+
     }
 
     public void submit(View view)
     {
         //textView.setText("Hello~ Welcome!!!");
         //Toast.makeText(this, "Hello~Welcome!!!",Toast.LENGTH_LONG).show();
-
         String text = editText.getText().toString();   //宣告一個local variable text，值為EditText物件 editText的內容 (APP執行時，由使用者所輸入的內容)
         Toast.makeText(this, "Hello~Welcome:" + text ,Toast.LENGTH_LONG).show();
 
@@ -111,7 +122,26 @@ public class MainActivity extends AppCompatActivity {
         {
             textView.setText(text);  //將TextView物件textView內容改成 區域變數text的內容!
         }
-
         editText.setText("");  //將EditText物件 editText的內容(使用者輸入的內容)清空
+        // 將鍵盤輸入的editText text寫入.txt檔案中
+        Utils.writeFile(this, "history.txt", text + '\n');
+        // 更新 ListView顯示的內容
+        showListView();
     }
+
+    private void setHistory()
+    {
+        String[] data = Utils.readFile(this, "history.txt").split("\n");
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, data);
+        historyListView.setAdapter(adapter);
+    }
+
+    // 將history.txt 內容 顯示在 ListView之中
+    private void showListView()
+    {
+        String[] data = Utils.readFile(this, "history.txt").split("\n");
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, data);
+        historyListView.setAdapter(adapter);
+    }
+
 }
