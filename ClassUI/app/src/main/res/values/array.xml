@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="storeNameList">
+        <item>台大一號店</item>
+        <item>台大二號店</item>
+        <item>台大三號店</item>
+        <item>台大四號店</item>
+        <item>台大五號店</item>
+        <item>台大六號店</item>
+    </string-array>
+</resources>

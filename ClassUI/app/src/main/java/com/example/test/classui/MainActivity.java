@@ -12,9 +12,11 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
+//import com.parse.Parse;
+//import com.parse.ParseObject;
 import static com.example.test.classui.Utils.*;
 
 public class MainActivity extends AppCompatActivity {
@@ -23,13 +25,13 @@ public class MainActivity extends AppCompatActivity {
     TextView textView;
     EditText editText;
     CheckBox checkBox;
-
     //使用SharedPreferences儲存應用程式的設定值，方便下次啟動時可載入偏好設定
     SharedPreferences sp;
     // editor看起來只是個 方便別名...-而已...但是當Mode採用 Context.MODE_PRIVATE，則必須另外宣告 SharedPreferences.Editor物件以 editor來執行Edit編輯介面功能!!! 若是以sp.Editor來執行，則跑不出效果!!!
     SharedPreferences.Editor editor;
 
     ListView historyListView;
+    Spinner spinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +46,11 @@ public class MainActivity extends AppCompatActivity {
         // 核取方塊 For顯示textView的方式!
         checkBox = (CheckBox) findViewById(R.id.checkBox);
 
-        // For relation with ListView in XML
+        // For relation with ListView in XML  // 這邊故意取名為 historyListView 不同於id.listView，寫程式時需要特別記住!!!
         historyListView = (ListView) findViewById(R.id.listView);
+
+        // For relation with Spinner in XML
+        spinner = (Spinner) findViewById(R.id.spinner);
 
         // SharedPreferences偏好設定檔(自定名稱：setting；模式：應用程式專用)
         sp = getSharedPreferences("setting", Context.MODE_PRIVATE);
@@ -80,8 +85,7 @@ public class MainActivity extends AppCompatActivity {
                 if ((keyCode == KeyEvent.KEYCODE_ENTER) && (event.getAction() == KeyEvent.ACTION_DOWN)) {
                     submit(v);
                     return true;
-                }
-                else
+                } else
                     return false;
             }
         });
@@ -90,7 +94,7 @@ public class MainActivity extends AppCompatActivity {
 
         //設定CheckBox狀態顯示 前次執行時最後狀態值，若找無狀態紀錄值則顯示False，
         //從SharedPreferences物件 以sp.getBoolean("checkBox", false) 取得偏好設定檔setting中所記錄的前次狀態值 key-value pair (key= "checkBox")
-        checkBox.setChecked(sp.getBoolean("checkBox",false));
+        checkBox.setChecked(sp.getBoolean("checkBox", false));
 
         //當CheckBox物件checkBox有異動時，將最新的checkBox狀態值存入 偏好設定檔setting中所記錄的前次狀態值 key-value pair (key= "checkBox")
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -104,6 +108,20 @@ public class MainActivity extends AppCompatActivity {
 
         //顯示 history.txt的內容於ListView
         showListView();
+
+        //設定Spinner下拉式選單的內容
+        showSpinner();
+
+
+        /*
+        // For Parse Server
+        Parse.enableLocalDatastore(this);
+        Parse.initialize(this);
+        ParseObject testObject = new ParseObject("TestObject");
+        testObject.put("hi", "XXX123456OOO");
+        testObject.saveInBackground();
+        */
+
 
     }
 
@@ -143,5 +161,15 @@ public class MainActivity extends AppCompatActivity {
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, data);
         historyListView.setAdapter(adapter);
     }
+
+    // 顯示下拉式選單的內容
+    private void showSpinner()
+    {
+        //String[] data = {"一號店","二號店","三號店","四號店","五號店"};
+        String[] data = getResources().getStringArray(R.array.storeNameList);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, data);
+        spinner.setAdapter(adapter);
+    }
+
 
 }
