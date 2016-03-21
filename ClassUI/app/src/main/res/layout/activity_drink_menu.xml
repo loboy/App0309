@@ -9,4 +9,711 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.test.classui.DrinkMenuActivity">
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/verticalLinearLayout0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true">
+
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView0_0"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="冰"
+                android:id="@+id/textView0_1"
+                android:layout_weight="6" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="熱"
+                android:id="@+id/textView0_2"
+                android:layout_weight="6" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView1_0"
+                android:layout_weight="1"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="小杯"
+                android:id="@+id/textView1_1"
+                android:layout_weight="2"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="中杯"
+                android:id="@+id/textView1_2"
+                android:layout_weight="2"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="大杯"
+                android:id="@+id/textView1_3"
+                android:layout_weight="2"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="小杯"
+                android:id="@+id/textView1_4"
+                android:layout_weight="2"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="中杯"
+                android:id="@+id/textView1_5"
+                android:layout_weight="2"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="大杯"
+                android:id="@+id/textView1_6"
+                android:layout_weight="2"
+                android:gravity="center" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/verticalLinearLayout0">
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="紅茶"
+                android:id="@+id/textView2_0"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:id="@+id/textView2_1"
+                android:layout_weight="2"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:id="@+id/textView2_2"
+                android:layout_weight="2"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:id="@+id/textView2_3"
+                android:layout_weight="2"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:id="@+id/textView2_4"
+                android:layout_weight="2"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:id="@+id/textView2_5"
+                android:layout_weight="2"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:id="@+id/textView2_6"
+                android:layout_weight="2"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView3_0"
+                android:layout_weight="1" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="+"
+                android:id="@+id/button3_1"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="increase"
+                android:tag = "RedTeaIceS" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:id="@+id/button3_2"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="decrease"
+                android:tag="RedTeaIceS" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="+"
+                android:id="@+id/button3_3"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="increase"
+                android:tag="RedTeaIceM" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:id="@+id/button3_4"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="decrease"
+                android:tag="RedTeaIceM" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="+"
+                android:id="@+id/button3_5"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="increase"
+                android:tag="RedTeaIceL" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:id="@+id/button3_6"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="decrease"
+                android:tag="RedTeaIceL" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="+"
+                android:id="@+id/button3_7"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="increase"
+                android:tag="RedTeaHotS" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:id="@+id/button3_8"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="decrease"
+                android:tag="RedTeaHotS" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="+"
+                android:id="@+id/button3_9"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="increase"
+                android:tag="RedTeaHotM" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:id="@+id/button3_10"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="decrease"
+                android:tag="RedTeaHotM" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="+"
+                android:id="@+id/button3_11"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="increase"
+                android:tag="RedTeaHotL" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:id="@+id/button3_12"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="decrease"
+                android:tag="RedTeaHotL" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="綠茶"
+                android:id="@+id/textView4_0"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:id="@+id/textView4_1"
+                android:layout_weight="2"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:id="@+id/textView4_2"
+                android:layout_weight="2"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:id="@+id/textView4_3"
+                android:layout_weight="2"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:id="@+id/textView4_4"
+                android:layout_weight="2"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:id="@+id/textView4_5"
+                android:layout_weight="2"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:id="@+id/textView4_6"
+                android:layout_weight="2"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView5_0"
+                android:layout_weight="1" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="+"
+                android:id="@+id/button5_1"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="increase"
+                android:tag = "GreenTeaIceS" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:id="@+id/button5_2"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="decrease"
+                android:tag = "GreenTeaIceS" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="+"
+                android:id="@+id/button5_3"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="increase"
+                android:tag = "GreenTeaIceM" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:id="@+id/button5_4"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="decrease"
+                android:tag = "GreenTeaIceM" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="+"
+                android:id="@+id/button5_5"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="increase"
+                android:tag = "GreenTeaIceL" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:id="@+id/button5_6"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="decrease"
+                android:tag = "GreenTeaIceL" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="+"
+                android:id="@+id/button5_7"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="increase"
+                android:tag = "GreenTeaHotS" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:id="@+id/button5_8"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="decrease"
+                android:tag = "GreenTeaHotS" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="+"
+                android:id="@+id/button5_9"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="increase"
+                android:tag = "GreenTeaHotM" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:id="@+id/button5_10"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="decrease"
+                android:tag = "GreenTeaHotM" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="+"
+                android:id="@+id/button5_11"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="increase"
+                android:tag = "GreenTeaHotL" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:id="@+id/button5_12"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="decrease"
+                android:tag = "GreenTeaHotL" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="奶茶"
+                android:id="@+id/textView6_0"
+                android:layout_weight="1" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:id="@+id/textView6_1"
+                android:layout_weight="2"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:id="@+id/textView6_2"
+                android:layout_weight="2"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:id="@+id/textView6_3"
+                android:layout_weight="2"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:id="@+id/textView6_4"
+                android:layout_weight="2"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:id="@+id/textView6_5"
+                android:layout_weight="2"
+                android:gravity="center" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="0"
+                android:id="@+id/textView6_6"
+                android:layout_weight="2"
+                android:gravity="center" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView7_0"
+                android:layout_weight="1" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="+"
+                android:id="@+id/button7_1"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="increase"
+                android:tag = "MilkTeaIceS" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:id="@+id/button7_2"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="decrease"
+                android:tag = "MilkTeaIceS" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="+"
+                android:id="@+id/button7_3"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="increase"
+                android:tag = "MilkTeaIceM" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:id="@+id/button7_4"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="decrease"
+                android:tag = "MilkTeaIceM" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="+"
+                android:id="@+id/button7_5"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="increase"
+                android:tag = "MilkTeaIceL" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:id="@+id/button7_6"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="decrease"
+                android:tag = "MilkTeaIceL" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="+"
+                android:id="@+id/button7_7"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="increase"
+                android:tag = "MilkTeaHotS" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:id="@+id/button7_8"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="decrease"
+                android:tag = "MilkTeaHotS" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="+"
+                android:id="@+id/button7_9"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="increase"
+                android:tag = "MilkTeaHotM" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:id="@+id/button7_10"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="decrease"
+                android:tag = "MilkTeaHotM" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="+"
+                android:id="@+id/button7_11"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="increase"
+                android:tag = "MilkTeaHotL" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="-"
+                android:id="@+id/button7_12"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:onClick="decrease"
+                android:tag = "MilkTeaHotL" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Cancel"
+                android:id="@+id/button8_0"
+                android:layout_weight="1"
+                android:onClick="cancel" />
+
+            <Button
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Ok"
+                android:id="@+id/button8_1"
+                android:layout_weight="1"
+                android:onClick="ok" />
+        </LinearLayout>
+    </LinearLayout>
+
 </RelativeLayout>

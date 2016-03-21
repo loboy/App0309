@@ -34,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
     ListView historyListView;
     Spinner spinner;
 
+    private static final int REQUEST_CODE_MENU_ACTIVITY = 0; // 定義  固定的 常數參數 REQUEST_CODE_MENU_ACTIVITY (for go to DrinkMenuActivity)
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -179,8 +181,25 @@ public class MainActivity extends AppCompatActivity {
         intent.setClass(this, DrinkMenuActivity.class);
 
         //讓 Activity (DrinkMenuActivity)  start
-        startActivity(intent);
+            // 單向傳輸 //startActivity(intent);
+            // 雙向傳輸
+        startActivityForResult(intent, REQUEST_CODE_MENU_ACTIVITY); // 並且要以 Override方式 設計一個 onActivityResult
     }
 
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == REQUEST_CODE_MENU_ACTIVITY)  // 判斷requestCode是否為 goMenu按鈕所觸發的 startActivityForResult
+        {
+            // 處理當DrinkMenuActivity finish()之後回傳的狀態碼 判斷：
+            // 例如 當處理當DrinkMenuActivity執行無誤時，在setResult(int resultCode , Intent data)時將resultCode設定為RESULT_OK狀態碼
+            if(resultCode == RESULT_OK)
+            {
+                //For Test: 將回傳資料Intent data，以.getStringExtra()方式取出其中Name= "orderData"的Value，顯示於TextView物件textView
+                textView.setText(data.getStringExtra("orderData"));
+            }
+        }
+    }
 }
