@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">ClassUI</string>
+    <string name="title_activity_parse_info">ParseInfo</string>
 </resources>

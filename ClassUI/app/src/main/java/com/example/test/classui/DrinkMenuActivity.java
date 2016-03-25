@@ -3,9 +3,15 @@ package com.example.test.classui;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class DrinkMenuActivity extends AppCompatActivity {
 
@@ -13,11 +19,15 @@ public class DrinkMenuActivity extends AppCompatActivity {
     TextView textView4_1, textView4_2, textView4_3, textView4_4, textView4_5, textView4_6; // 綠茶 (冰)小中大 (熱)小中大
     TextView textView6_1, textView6_2, textView6_3, textView6_4, textView6_5, textView6_6; // 奶茶 (冰)小中大 (熱)小中大
 
+    LinearLayout orderCountLinearLayout;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_drink_menu);
+        Log.d("Debug", "DrinkMenuActivity : 1 onCreate"); // for Trace of Activity Life-Cycle
 
         // Change into DrinkMenuActivity: Hello Message.
         Toast.makeText(this, "Hello~Welcome DrinkMenuActivity!!!", Toast.LENGTH_LONG).show();
@@ -42,6 +52,50 @@ public class DrinkMenuActivity extends AppCompatActivity {
         textView6_5 = (TextView) findViewById(R.id.textView6_5); // for case "MilkTeaHotM"
         textView6_6 = (TextView) findViewById(R.id.textView6_6); // for case "MilkTeaHotL"
     }
+
+    // for Trace of Activity Life-Cycle
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+        Log.d("Debug", "DrinkMenuActivity : 2 onStart");
+    }
+
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+        Log.d("Debug", "DrinkMenuActivity : 3 onResume");
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        Log.d("Debug", "DrinkMenuActivity : 4 onPause");
+    }
+
+    @Override
+    protected void onStop()
+    {
+        super.onStop();
+        Log.d("Debug", "DrinkMenuActivity : 5 onStop");
+    }
+
+    @Override
+    protected void onRestart()
+    {
+        super.onRestart();
+        Log.d("Debug", "DrinkMenuActivity : 6 onRestart");
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        Log.d("Debug", "DrinkMenuActivity : 7 onDestroy");
+    }
+    // End for Trace of Activity Life-Cycle
 
     public void increase (View view)
     {
@@ -311,10 +365,74 @@ public class DrinkMenuActivity extends AppCompatActivity {
 
     }
 
+    public JSONArray getOrderData()
+    {
+        JSONArray array = new JSONArray();
+        // ...
+        orderCountLinearLayout = (LinearLayout) findViewById(R.id.orderCountLinearLayout);
+
+        //先取得 orderCountLinearLayout 底下有多少個LinearLayout物件
+        int childCount = orderCountLinearLayout.getChildCount(); // childCount =7
+        // 顯示品項訂單數量的LinearLayout剛好是位於index=0、2、4。
+        for (int i=0; i< childCount - 2; i=i+2) // i= 0, 2, 4會執行； i=6 因不符合 < (7-2) 所以就不會執行!
+        {
+            //宣告一個 LinearLyout 物件用來儲存 所對應的Child LinearLayout：
+            LinearLayout horizontalLayout = (LinearLayout) orderCountLinearLayout.getChildAt(i);
+
+            //宣告1 個 Name & 6個數字的原型物件object (屬於Horizontal LinearLayout 的.getChildAt(i) index=0~6)，用來儲存於該物件，在從各物件讀取資料值
+            TextView nameTextView = (TextView) horizontalLayout.getChildAt(0);
+            TextView ice_s_TextView = (TextView) horizontalLayout.getChildAt(1);
+            TextView ice_m_nameTextView = (TextView) horizontalLayout.getChildAt(2);
+            TextView ice_l_nameTextView = (TextView) horizontalLayout.getChildAt(3);
+            TextView hot_s_nameTextView = (TextView) horizontalLayout.getChildAt(4);
+            TextView hot_m_nameTextView = (TextView) horizontalLayout.getChildAt(5);
+            TextView hot_l_nameTextView = (TextView) horizontalLayout.getChildAt(6);
+
+            //宣告1 個 Name & 6個數字的字串變數，用來儲存於JSONObject之中
+            String name = nameTextView.getText().toString();
+            int ice_s = Integer.parseInt(ice_s_TextView.getText().toString());
+            int ice_m = Integer.parseInt(ice_m_nameTextView.getText().toString());
+            int ice_l = Integer.parseInt(ice_l_nameTextView.getText().toString());
+            int hot_s = Integer.parseInt(hot_s_nameTextView.getText().toString());
+            int hot_m = Integer.parseInt(hot_m_nameTextView.getText().toString());
+            int hot_l = Integer.parseInt(hot_l_nameTextView.getText().toString());
+
+            // try-catch 例外處理
+            try
+            {
+                JSONObject obj = new JSONObject();
+                obj.put("name",name);
+                obj.put("ice_s",ice_s);
+                obj.put("ice_m",ice_m);
+                obj.put("ice_l",ice_l);
+                obj.put("hot_s",hot_s);
+                obj.put("hot_m",hot_m);
+                obj.put("hot_l",hot_l);
+
+                array.put(obj);
+            }
+            catch (JSONException e)
+            {
+                e.printStackTrace();
+            }
+            catch (Exception e) // no need ?
+            {
+                e.printStackTrace();
+            }
+        } //end of for-loop
+        
+        return  array;
+    }
+
     public void ok(View view)
     {
         Intent data = new Intent();
-        data.putExtra("orderData","Order Done");
+
+        JSONArray array = getOrderData();
+
+        //data.putExtra("orderData","Order Done");
+        data.putExtra("orderData", array.toString());
+
         setResult(RESULT_OK, data); // int resultCode = RESULT_OK ; Intent data = data
         finish();
     }

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View; // For use of void submit(View view)
 import android.view.inputmethod.EditorInfo;
@@ -18,6 +19,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 //import com.parse.Parse;
 //import com.parse.ParseObject;
+import com.parse.Parse;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import static com.example.test.classui.Utils.*;
 
 public class MainActivity extends AppCompatActivity {
@@ -34,12 +41,17 @@ public class MainActivity extends AppCompatActivity {
     ListView historyListView;
     Spinner spinner;
 
+    // For Store Test of orderData from DrinkMenuActivity
+    String orderData;
+
     private static final int REQUEST_CODE_MENU_ACTIVITY = 0; // 定義  固定的 常數參數 REQUEST_CODE_MENU_ACTIVITY (for go to DrinkMenuActivity)
+    private static final int REQUEST_CODE_PARSE_ACTIVITY = 0; // 定義  固定的 常數參數 REQUEST_CODE_PARSE_ACTIVITY (for go to ParseInfoActivity)
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.d("Debug", "MainActivity : 1 onCreate"); // for Trace of Activity Life-Cycle
 
         // 畫面上建置的兩個文字方塊，要在此程式內能處理，需要進行幾個動作! {1. 先宣告一個相同類別的物件，準備來存取該物件內容 ;  2. ; 必須以 findViewById() 在java中取得Layout XML的物件聯繫關係，並再加強制轉型 }
         // 習慣上，JAVA這邊宣告的物件名稱會故意命名為跟XML的物件ID名稱相同，方便程式開發者了解其對應關係!!!
@@ -93,8 +105,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-
-
         //設定CheckBox狀態顯示 前次執行時最後狀態值，若找無狀態紀錄值則顯示False，
         //從SharedPreferences物件 以sp.getBoolean("checkBox", false) 取得偏好設定檔setting中所記錄的前次狀態值 key-value pair (key= "checkBox")
         checkBox.setChecked(sp.getBoolean("checkBox", false));
@@ -127,6 +137,51 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    // for Trace of Activity Life-Cycle
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
+        Log.d("Debug", "MainActivity : 2 onStart");
+    }
+
+    @Override
+     protected void onResume()
+    {
+        super.onResume();
+        Log.d("Debug", "MainActivity : 3 onResume");
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        Log.d("Debug", "MainActivity : 4 onPause");
+    }
+
+    @Override
+    protected void onStop()
+    {
+        super.onStop();
+        Log.d("Debug", "MainActivity : 5 onStop");
+    }
+
+    @Override
+    protected void onRestart()
+    {
+        super.onRestart();
+        Log.d("Debug", "MainActivity : 6 onRestart");
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        super.onDestroy();
+        Log.d("Debug", "MainActivity : 7 onDestroy");
+    }
+    // End for Trace of Activity Life-Cycle
+
 
     public void submit(View view)
     {
@@ -186,6 +241,18 @@ public class MainActivity extends AppCompatActivity {
         startActivityForResult(intent, REQUEST_CODE_MENU_ACTIVITY); // 並且要以 Override方式 設計一個 onActivityResult
     }
 
+    public void goParse(View view)
+    {
+        // 切換至另一個Activity (ParseInfoActivity)，需要以Intent物件來控制轉換流程。
+        Intent intent = new Intent();
+        intent.setClass(this, ParseInfoActivity.class);
+
+        //讓 Activity (DrinkMenuActivity)  start
+        // 單向傳輸 //startActivity(intent);
+        // 雙向傳輸
+        startActivityForResult(intent, REQUEST_CODE_PARSE_ACTIVITY); // 並且要以 Override方式 設計一個 onActivityResult
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -198,7 +265,53 @@ public class MainActivity extends AppCompatActivity {
             if(resultCode == RESULT_OK)
             {
                 //For Test: 將回傳資料Intent data，以.getStringExtra()方式取出其中Name= "orderData"的Value，顯示於TextView物件textView
-                textView.setText(data.getStringExtra("orderData"));
+                //textView.setText(data.getStringExtra("orderData"));
+                orderData = data.getStringExtra("orderData");
+                try
+                {
+                    JSONArray array = new JSONArray(orderData); // copy orderData (String) ==> (JSONArray)
+                    String orderDataTxt = "";
+                    for(int i=0; i < array.length(); i++)
+                    {
+                        JSONObject obj = array.getJSONObject(i);
+
+                        String name = obj.getString("name");
+                        String ice_s = String.valueOf(obj.getInt("ice_s")); // original data type from INT to String
+                        String ice_m = String.valueOf(obj.getInt("ice_m")); // original data type from INT to String
+                        String ice_l = String.valueOf(obj.getInt("ice_l")); // original data type from INT to String
+                        String hot_s = String.valueOf(obj.getInt("hot_s")); // original data type from INT to String
+                        String hot_m = String.valueOf(obj.getInt("hot_m")); // original data type from INT to String
+                        String hot_l = String.valueOf(obj.getInt("hot_l")); // original data type from INT to String
+
+                        orderDataTxt = orderDataTxt + "name:" + name + "\t"
+                                + "ice_s:" + ice_s + "\t\t"
+                                + "ice_m:" + ice_m +  "\t\t"
+                                + "ice_l:" + ice_l +  "\t\t"
+                                + "hot_s:" + hot_s +  "\t\t"
+                                + "hot_m:" + hot_m +  "\t\t"
+                                + "hot_l:" + hot_l +  "\n";
+                    }
+
+                    textView.setText(orderDataTxt);
+
+                }
+                catch (JSONException e)
+                {
+                    e.printStackTrace();
+                }
+                catch (Exception e)
+                {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        if(requestCode == REQUEST_CODE_PARSE_ACTIVITY)  // 判斷requestCode是否為 goMenu按鈕所觸發的 startActivityForResult
+        {
+            // 處理當DrinkMenuActivity finish()之後回傳的狀態碼 判斷：
+            // 例如 當處理當DrinkMenuActivity執行無誤時，在setResult(int resultCode , Intent data)時將resultCode設定為RESULT_OK狀態碼
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(MainActivity.this, "ParseInfoActivity Run Finish. ", Toast.LENGTH_LONG).show();
             }
         }
     }
