@@ -1,8 +1,11 @@
 package com.example.test.classui;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -41,7 +44,15 @@ public class ParseInfoActivity extends AppCompatActivity {
 
         pStoreSpinner = (Spinner) findViewById(R.id.pStoreSpinner);
         orderRecordListView = (ListView) findViewById(R.id.orderRecordListView);
-        showParseStore();
+        showParseStore(); //顯示ParseServer訂單總表於listView
+
+        //For 取得使用者點擊listView清單的哪個項目的位置index
+        orderRecordListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                goDetailOrder(position);
+            }
+        });
     }
 
     private void showParseStore()
@@ -87,12 +98,11 @@ public class ParseInfoActivity extends AppCompatActivity {
         orderQuery.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> objects, ParseException e) {
-                if(e != null) // 表示執行有錯
+                if (e != null) // 表示執行有錯
                 {
                     Toast.makeText(ParseInfoActivity.this, "Query Fail of Order: " + e.getMessage(), Toast.LENGTH_LONG).show();
                     return;
-                }
-                else // 表示執行成功: 當ParseQuery執行成功時，會將回傳資料放在 List<ParseObject> 物件中
+                } else // 表示執行成功: 當ParseQuery執行成功時，會將回傳資料放在 List<ParseObject> 物件中
                 {
                     Toast.makeText(ParseInfoActivity.this, "Query Success of Order: ", Toast.LENGTH_LONG).show();
 
@@ -108,8 +118,7 @@ public class ParseInfoActivity extends AppCompatActivity {
                     List<Map<String, String>> orderData = new ArrayList<Map<String, String>>();
 
                     //逐筆 取出Parser Server傳來的 List<ParseObject>中的 <ParseObject>之JSON Key-Value內容 ， 並逐筆存入List<Map<String, String>>物件中
-                    for (int i = 0; i < orderQueryResults.size(); i++)
-                    {
+                    for (int i = 0; i < orderQueryResults.size(); i++) {
                         ParseObject object = orderQueryResults.get(i);
                         String note = object.getString("note");
                         String storeInfo = object.getString("storeInfo");
@@ -122,8 +131,7 @@ public class ParseInfoActivity extends AppCompatActivity {
                         // XXX Start of Parse Menu Order
                         try {
                             JSONArray oneStoreOrderJSONArray = new JSONArray(menu);
-                            for (int j = 0; j < oneStoreOrderJSONArray.length(); j++)
-                            {
+                            for (int j = 0; j < oneStoreOrderJSONArray.length(); j++) {
                                 JSONObject order = oneStoreOrderJSONArray.getJSONObject(j);
 
                                 // "Key" defined from JSONObject from Parse Server's Data : "name" & "l" & "m"
@@ -133,11 +141,11 @@ public class ParseInfoActivity extends AppCompatActivity {
                                 recordListParseObjectString = recordListParseObjectString + name + "\t\t" + "l:" + lNumber + "\t\t" + "m:" + mNumber + "\n"; //記錄所有訂單內容
                                 oneOrderInfo = oneOrderInfo + name + "\t\t" + "l:" + lNumber + "\t\t" + "m:" + mNumber + "\n"; //顯示一張訂單內容
                                 // 判斷 飲料訂單的數量為空值的情況
-                                if(order.isNull("lNumber"))
+                                if (order.isNull("lNumber"))
                                     oneOrderSum_Int = oneOrderSum_Int;
                                 else
                                     oneOrderSum_Int = oneOrderSum_Int + order.getInt("lNumber");
-                                if(order.isNull("mNumber"))
+                                if (order.isNull("mNumber"))
                                     oneOrderSum_Int = oneOrderSum_Int;
                                 else
                                     oneOrderSum_Int = oneOrderSum_Int + order.getInt("mNumber");
@@ -167,5 +175,25 @@ public class ParseInfoActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void goDetailOrder(int position)
+    {
+        ParseObject obj = orderQueryResults.get(position); // orderQueryResults = ParseServer傳回的資料
+        Intent intent = new Intent();
+        intent.setClass(this, OrderDetailActivity.class); // 預計啟動 OrderDetailActivity
+
+        //夾帶 訂單資訊
+        intent.putExtra("note", obj.getString("note"));
+        intent.putExtra("storeInfo", obj.getString("storeInfo"));
+        intent.putExtra("menu", obj.getString("menu"));
+
+        //特地判斷是否有附圖，有圖則改以傳送其URL ==> 讓接收端可直接顯示
+        if(obj.getParseFile("photo") != null)
+        {
+            intent.putExtra("photoURL", obj.getParseFile("photo").getUrl());
+        }
+
+        startActivity(intent);
     }
 }

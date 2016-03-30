@@ -3,27 +3,34 @@ package com.example.test.classui;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View; // For use of void submit(View view)
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.Manifest;
 //import com.parse.Parse;
-//import com.parse.ParseObject;
-import com.parse.Parse;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+//import java.util.jar.Manifest;
 
 import static com.example.test.classui.Utils.*;
 
@@ -41,11 +48,37 @@ public class MainActivity extends AppCompatActivity {
     ListView historyListView;
     Spinner spinner;
 
+    // Show Camera Photo
+    ImageView cameraImageView;
+
     // For Store Test of orderData from DrinkMenuActivity
     String orderData;
 
     private static final int REQUEST_CODE_MENU_ACTIVITY = 0; // 定義  固定的 常數參數 REQUEST_CODE_MENU_ACTIVITY (for go to DrinkMenuActivity)
-    private static final int REQUEST_CODE_PARSE_ACTIVITY = 0; // 定義  固定的 常數參數 REQUEST_CODE_PARSE_ACTIVITY (for go to ParseInfoActivity)
+    private static final int REQUEST_CODE_PARSE_ACTIVITY = 1; // 定義  固定的 常數參數 REQUEST_CODE_PARSE_ACTIVITY (for go to ParseInfoActivity)
+    private static final int REQUEST_CODE_CAMERA = 2;           // 定義  固定的 常數參數 REQUEST_CODE_CAMERA (for goToCamera())
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
+        getMenuInflater().inflate(R.menu.menu_main, menu);
+        return true;
+    }
+
+    @Override
+    public  boolean onOptionsItemSelected(MenuItem item)
+    {
+        int itemId = item.getItemId();
+
+        //判斷 使用者點下哪個選項
+        if(itemId == R.id.action_take_photo)
+        {
+            Toast.makeText(this, "take photo", Toast.LENGTH_LONG).show();
+            goToCamera();
+        }
+        return super.onOptionsItemSelected(item); // for what and why???
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +99,9 @@ public class MainActivity extends AppCompatActivity {
 
         // For relation with Spinner in XML
         spinner = (Spinner) findViewById(R.id.spinner);
+
+        // For relation with ImageView in XML
+        cameraImageView = (ImageView) findViewById(R.id.cameraImageView);
 
         // SharedPreferences偏好設定檔(自定名稱：setting；模式：應用程式專用)
         sp = getSharedPreferences("setting", Context.MODE_PRIVATE);
@@ -229,6 +265,26 @@ public class MainActivity extends AppCompatActivity {
         spinner.setAdapter(adapter);
     }
 
+    private void goToCamera()
+    {
+        //判別SDK版本:  SDK >=23的版本 一定需要有 Manifest.permission.WRITE_EXTERNAL_STORAGE 的授權
+        if(Build.VERSION.SDK_INT >= 23)
+        {
+            if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
+            {
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
+                return;
+            }
+        }
+
+        Intent intent = new Intent();
+        intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE); // 設定啟動相機程式
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Utils.getPhotoUri()); // 於Utils class新增一個getPhotoUri()函式，處理相片存檔的方式與路徑，回傳相片Uri物件
+
+        //Start Activity
+        startActivityForResult(intent, REQUEST_CODE_CAMERA);
+    }
+
     public void goMenu(View view)
     {
         // 切換至另一個Activity (DrinkMenuActivity)，需要以Intent物件來控制轉換流程。
@@ -312,6 +368,15 @@ public class MainActivity extends AppCompatActivity {
             // 例如 當處理當DrinkMenuActivity執行無誤時，在setResult(int resultCode , Intent data)時將resultCode設定為RESULT_OK狀態碼
             if (resultCode == RESULT_OK) {
                 Toast.makeText(MainActivity.this, "ParseInfoActivity Run Finish. ", Toast.LENGTH_LONG).show();
+            }
+        }
+
+        if(requestCode == REQUEST_CODE_CAMERA)  // 判斷requestCode是否為 右上角功能選單選項Take Photo所觸發的goToCamera ()回傳的
+        {
+            // 例如 當處理當DrinkMenuActivity執行無誤時，在setResult(int resultCode , Intent data)時將resultCode設定為RESULT_OK狀態碼
+            if (resultCode == RESULT_OK) {
+                Toast.makeText(MainActivity.this, "Take Photo Finish. ", Toast.LENGTH_LONG).show();
+                cameraImageView.setImageURI(Utils.getPhotoUri());
             }
         }
     }
