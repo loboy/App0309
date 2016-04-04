@@ -12,35 +12,70 @@
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/scrollView" >
+        android:id="@+id/scrollView"
+        android:layout_alignParentLeft="true">
 
-        <LinearLayout
-            android:orientation="vertical"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Note"
-                android:id="@+id/noteDetail" />
+                android:id="@+id/linearLayout"
+                android:layout_alignParentLeft="true">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="StoreInfo"
-                android:id="@+id/storeDetail" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Note"
+                    android:id="@+id/noteDetail" />
 
-            <TextView
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="StoreInfo"
+                    android:id="@+id/storeDetail" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Menu"
+                    android:id="@+id/menuDetail" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/photoDetail" />
+
+            </LinearLayout>
+
+            <Switch
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Menu"
-                android:id="@+id/menuDetail" />
+                android:id="@+id/imageWebViewSwitch"
+                android:layout_below="@+id/linearLayout"
+                android:textOff="ImageView"
+                android:textOn="WebView"
+                android:textSize="14dp" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/photoDetail" />
-        </LinearLayout>
+                android:id="@+id/mapImageView"
+                android:layout_alignParentStart="false"
+                android:layout_alignParentLeft="false"
+                android:layout_alignParentTop="false"
+                android:layout_below="@+id/imageWebViewSwitch" />
+
+            <WebView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/mapWebView"
+                android:layout_below="@+id/mapImageView" />
+
+        </RelativeLayout>
     </ScrollView>
+
 </RelativeLayout>
