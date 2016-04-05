@@ -66,10 +66,6 @@ public class Utils {
 
     public static Uri getPhotoUri()
     {
-        // 不使用上課所教的 :   File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-        //String pathImage = Environment.getExternalStorageDirectory().getAbsolutePath() + "/classUI_photo.jpg";
-        //File classImageFile = new File(pathImage);
-
         File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
         if(dir.exists() == false)
         {
@@ -77,10 +73,10 @@ public class Utils {
         }
 
         // 在預設的Public Directory資料夾下，新建一個指定檔名的檔案
-        File classImageFile = new File(dir, "classUI_photo.png");
+        File cameraImageFile = new File(dir, "Class_Camera_Photo.png");
 
         //回傳該檔名的圖檔Uri
-        return Uri.fromFile(classImageFile);
+        return Uri.fromFile(cameraImageFile);
     }
 
     public static byte[] urlToByte(String urlString)

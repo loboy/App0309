@@ -58,6 +58,9 @@ public class MainActivity extends AppCompatActivity {
     private static final int REQUEST_CODE_PARSE_ACTIVITY = 1; // 定義  固定的 常數參數 REQUEST_CODE_PARSE_ACTIVITY (for go to ParseInfoActivity)
     private static final int REQUEST_CODE_CAMERA = 2;           // 定義  固定的 常數參數 REQUEST_CODE_CAMERA (for goToCamera())
 
+    // for check if there is Camara Photo File
+    private boolean hasCameraPhoto = false;
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
@@ -144,6 +147,14 @@ public class MainActivity extends AppCompatActivity {
         //設定CheckBox狀態顯示 前次執行時最後狀態值，若找無狀態紀錄值則顯示False，
         //從SharedPreferences物件 以sp.getBoolean("checkBox", false) 取得偏好設定檔setting中所記錄的前次狀態值 key-value pair (key= "checkBox")
         checkBox.setChecked(sp.getBoolean("checkBox", false));
+        if(checkBox.isChecked()) // Initially Check
+        {
+            cameraImageView.setVisibility(View.INVISIBLE);
+        }
+        else
+        {
+            cameraImageView.setVisibility(View.VISIBLE);
+        }
 
         //當CheckBox物件checkBox有異動時，將最新的checkBox狀態值存入 偏好設定檔setting中所記錄的前次狀態值 key-value pair (key= "checkBox")
         checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -152,6 +163,14 @@ public class MainActivity extends AppCompatActivity {
                 //記錄於偏好設定檔setting中 (key= "checkBox")
                 editor.putBoolean("checkBox", checkBox.isChecked()); // editor = sp.edit()
                 editor.apply(); // editor = sp.edit()
+                if(isChecked) // Change Listener Check // try "isChecked" or "checkBox.isChecked()"
+                {
+                    cameraImageView.setVisibility(View.INVISIBLE);
+                }
+                else
+                {
+                    cameraImageView.setVisibility(View.VISIBLE);
+                }
             }
         });
 
@@ -226,14 +245,7 @@ public class MainActivity extends AppCompatActivity {
         String text = editText.getText().toString();   //宣告一個local variable text，值為EditText物件 editText的內容 (APP執行時，由使用者所輸入的內容)
         Toast.makeText(this, "Hello~Welcome:" + text ,Toast.LENGTH_LONG).show();
 
-        if(checkBox.isChecked()) // 判斷 CheckBox物件 checkBox 是否為 勾選狀態 (True / False)
-        {
-            textView.setText("*********");  //將TextView物件textView內容改成 顯示*********
-        }
-        else
-        {
-            textView.setText(text);  //將TextView物件textView內容改成 區域變數text的內容!
-        }
+        textView.setText(text);  //將TextView物件textView內容改成 區域變數text的內容!
         editText.setText("");  //將EditText物件 editText的內容(使用者輸入的內容)清空
         // 將鍵盤輸入的editText text寫入.txt檔案中
         Utils.writeFile(this, "history.txt", text + '\n');
@@ -241,16 +253,14 @@ public class MainActivity extends AppCompatActivity {
         showListView();
     }
 
-    private void setHistory()
-    {
+    private void setHistory() {
         String[] data = Utils.readFile(this, "history.txt").split("\n");
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, data);
         historyListView.setAdapter(adapter);
     }
 
     // 將history.txt 內容 顯示在 ListView之中
-    private void showListView()
-    {
+    private void showListView() {
         String[] data = Utils.readFile(this, "history.txt").split("\n");
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, data);
         historyListView.setAdapter(adapter);
@@ -267,11 +277,14 @@ public class MainActivity extends AppCompatActivity {
 
     private void goToCamera()
     {
+        Toast.makeText(this, "goToCamera1", Toast.LENGTH_LONG).show();
         //判別SDK版本:  SDK >=23的版本 一定需要有 Manifest.permission.WRITE_EXTERNAL_STORAGE 的授權
         if(Build.VERSION.SDK_INT >= 23)
         {
+            //Toast.makeText(this, "goToCamera1-1", Toast.LENGTH_LONG).show();
             if(checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
             {
+                Toast.makeText(this, "goToCamera1-2", Toast.LENGTH_LONG).show();
                 requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
                 return;
             }
@@ -279,10 +292,12 @@ public class MainActivity extends AppCompatActivity {
 
         Intent intent = new Intent();
         intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE); // 設定啟動相機程式
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, Utils.getPhotoUri()); // 於Utils class新增一個getPhotoUri()函式，處理相片存檔的方式與路徑，回傳相片Uri物件
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, Utils.getPhotoUri()); // 於Utils class新增一個getPhotoUri()函式，指定相片存檔路徑檔名(Class_Camera_Photo.png)，讓相機相片Uri物件儲存
 
+        Toast.makeText(this, "goToCamera2", Toast.LENGTH_LONG).show();
         //Start Activity
         startActivityForResult(intent, REQUEST_CODE_CAMERA);
+        Toast.makeText(this, "goToCamera3", Toast.LENGTH_LONG).show();
     }
 
     public void goMenu(View view)
@@ -376,7 +391,8 @@ public class MainActivity extends AppCompatActivity {
             // 例如 當處理當DrinkMenuActivity執行無誤時，在setResult(int resultCode , Intent data)時將resultCode設定為RESULT_OK狀態碼
             if (resultCode == RESULT_OK) {
                 Toast.makeText(MainActivity.this, "Take Photo Finish. ", Toast.LENGTH_LONG).show();
-                cameraImageView.setImageURI(Utils.getPhotoUri());
+                cameraImageView.setImageURI(Utils.getPhotoUri()); // 已經將照片存在 Utils.getPhotoUri() 指定位置路徑的檔案 (???是存檔 還是顯示圖片???)
+                hasCameraPhoto = true;
             }
         }
     }
