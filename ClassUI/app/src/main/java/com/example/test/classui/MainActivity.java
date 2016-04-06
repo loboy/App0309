@@ -1,18 +1,19 @@
 package com.example.test.classui;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View; // For use of void submit(View view)
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.ArrayAdapter;
 import android.widget.CheckBox;
@@ -23,16 +24,13 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.Manifest;
-//import com.parse.Parse;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+//import com.parse.Parse;
 //import java.util.jar.Manifest;
-
-import static com.example.test.classui.Utils.*;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -253,17 +251,19 @@ public class MainActivity extends AppCompatActivity {
         showListView();
     }
 
-    private void setHistory() {
-        String[] data = Utils.readFile(this, "history.txt").split("\n");
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, data);
-        historyListView.setAdapter(adapter);
-    }
-
     // 將history.txt 內容 顯示在 ListView之中
     private void showListView() {
-        String[] data = Utils.readFile(this, "history.txt").split("\n");
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, data);
-        historyListView.setAdapter(adapter);
+        if(Utils.readFile(this, "history.txt") == null) //懷疑 因一開始的開發環境若無建立 history.txt ，而導致專案轉移環境後的執行失敗!
+        {
+            return;
+        }
+        else
+        {
+            String[] data = Utils.readFile(this, "history.txt").split("\n");
+            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, data);
+            historyListView.setAdapter(adapter);
+        }
+
     }
 
     // 顯示下拉式選單的內容
