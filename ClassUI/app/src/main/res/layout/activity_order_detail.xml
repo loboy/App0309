@@ -17,7 +17,7 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <LinearLayout
                 android:orientation="vertical"
@@ -74,6 +74,15 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/mapWebView"
                 android:layout_below="@+id/mapImageView" />
+
+            <fragment
+                android:layout_width="wrap_content"
+                android:layout_height="800dp"
+                android:name="com.google.android.gms.maps.MapFragment"
+                android:id="@+id/googleMapFragment"
+                android:layout_below="@+id/mapWebView"
+                android:layout_alignParentStart="false"
+                android:layout_alignParentLeft="false" />
 
         </RelativeLayout>
     </ScrollView>

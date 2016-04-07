@@ -2,10 +2,9 @@ package com.example.test.classui;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.media.Image;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.CompoundButton;
@@ -14,7 +13,13 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.squareup.picasso.Picasso;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,6 +34,7 @@ public class OrderDetailActivity extends AppCompatActivity {
 
     //for address extracted from Parse Server
     private String address;
+    private String storeTitle;
 
     TextView noteDetail;
     TextView storeDetail;
@@ -37,6 +43,8 @@ public class OrderDetailActivity extends AppCompatActivity {
     ImageView mapImageView;
     WebView mapWebView;
     Switch imageWebViewSwitch;
+    MapFragment googleMapFragment;
+    GoogleMap gMap; // 避免使用googleMap 與 預設物件名稱 重複
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +60,14 @@ public class OrderDetailActivity extends AppCompatActivity {
         imageWebViewSwitch = (Switch) findViewById(R.id.imageWebViewSwitch);
         imageWebViewSwitch.setChecked(false);
 
+        googleMapFragment = (MapFragment) getFragmentManager().findFragmentById(R.id.googleMapFragment);
+        googleMapFragment.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                gMap = googleMap;
+            }
+        });
+
 
         // ImageView and WebView Default Setting of Visible
         mapImageView.setVisibility(View.VISIBLE);
@@ -62,6 +78,7 @@ public class OrderDetailActivity extends AppCompatActivity {
         String storeInformation = getIntent().getStringExtra("storeInfo");
         storeDetail.setText(storeInformation); //storeDetail.setText(getIntent().getStringExtra("storeInfo"));
         address = storeInformation.split(",")[1]; //取出 店家的地址
+        storeTitle = storeInformation.split(",")[0]; //顯示 店家的名稱
 
         //處理menu
         String menu = getIntent().getStringExtra("menu");
@@ -180,6 +197,30 @@ public class OrderDetailActivity extends AppCompatActivity {
 
             //Shown in WebView
             mapWebView.loadUrl(mapUrl);
+
+            //Shown in MapFragment
+            LatLng gMapLocation = new LatLng(latLng[0], latLng[1]); // 將經緯度座標 儲存於 LatLng物件中
+            gMap.moveCamera(CameraUpdateFactory.newLatLngZoom(gMapLocation, 17));
+            //加上地標資訊標示
+            gMap.addMarker(new MarkerOptions().title(storeTitle)
+                    .snippet(address)
+                    .position(gMapLocation)
+            );
+            //設定該地標被點選時，do what? Ex. show Message.
+            gMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(Marker marker) {
+                    //Show Message
+                    Toast.makeText(OrderDetailActivity.this, marker.getTitle() + "," + marker.getSnippet(), Toast.LENGTH_LONG).show();
+                    return false;
+                }
+            });
+
+            /*
+                                // For View Test
+                                //mapImageView.setVisibility(View.GONE);
+                                //mapWebView.setVisibility(View.GONE);
+                        */
         }
     }
 }
