@@ -1,8 +1,8 @@
 package com.example.test.classui;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class ParseInfoActivity extends AppCompatActivity {
 
@@ -136,19 +135,32 @@ public class ParseInfoActivity extends AppCompatActivity {
 
                                 // "Key" defined from JSONObject from Parse Server's Data : "name" & "l" & "m"
                                 String name = order.getString("name");
-                                String lNumber = String.valueOf(order.getInt("lNumber")); // l
-                                String mNumber = String.valueOf(order.getInt("mNumber")); // m
-                                recordListParseObjectString = recordListParseObjectString + name + "\t\t" + "l:" + lNumber + "\t\t" + "m:" + mNumber + "\n"; //記錄所有訂單內容
-                                oneOrderInfo = oneOrderInfo + name + "\t\t" + "l:" + lNumber + "\t\t" + "m:" + mNumber + "\n"; //顯示一張訂單內容
+                                String ice_s = String.valueOf(order.getInt("ice_s"));
+                                String ice_m = String.valueOf(order.getInt("ice_m"));
+                                String ice_l = String.valueOf(order.getInt("ice_l"));
+                                String hot_s = String.valueOf(order.getInt("hot_s"));
+                                String hot_m = String.valueOf(order.getInt("hot_m"));
+                                String hot_l = String.valueOf(order.getInt("hot_l"));
+                                recordListParseObjectString = recordListParseObjectString + name + "\t\t" + "ice_s:" + ice_s + "\t\t" + "ice_m:" + ice_m + "\t\t" + "ice_l:" + ice_l + "\t\t" + "hot_s:" + hot_s + "\t\t" + "hot_m:" + hot_m + "\t\t" + "hot_l:" + hot_l + "\n"; //記錄所有訂單內容
+                                oneOrderInfo = oneOrderInfo + name + "\t\t" + "ice_s:" + ice_s + "\t\t" + "ice_m:" + ice_m + "\t\t" + "ice_l:" + ice_l + "\t\t" + "hot_s:" + hot_s + "\t\t" + "hot_m:" + hot_m + "\t\t" + "hot_l:" + hot_l + "\n"; //顯示一張訂單內容
+                                // 計數 (想要知道的冰熱小中大杯飲料數量)
+                                if (!order.isNull("ice_s"))
+                                    oneOrderSum_Int = oneOrderSum_Int + order.getInt("ice_s");
+                                if (!order.isNull("ice_m"))
+                                    oneOrderSum_Int = oneOrderSum_Int + order.getInt("ice_m");
+                                if (!order.isNull("ice_l"))
+                                    oneOrderSum_Int = oneOrderSum_Int + order.getInt("ice_l");
+                                if (!order.isNull("hot_s"))
+                                    oneOrderSum_Int = oneOrderSum_Int + order.getInt("hot_s");
+                                if (!order.isNull("hot_m"))
+                                    oneOrderSum_Int = oneOrderSum_Int + order.getInt("hot_m");
+                                if (!order.isNull("hot_l"))
+                                    oneOrderSum_Int = oneOrderSum_Int + order.getInt("hot_l");
                                 // 判斷 飲料訂單的數量為空值的情況
-                                if (order.isNull("lNumber"))
-                                    oneOrderSum_Int = oneOrderSum_Int;
-                                else
-                                    oneOrderSum_Int = oneOrderSum_Int + order.getInt("lNumber");
-                                if (order.isNull("mNumber"))
-                                    oneOrderSum_Int = oneOrderSum_Int;
-                                else
-                                    oneOrderSum_Int = oneOrderSum_Int + order.getInt("mNumber");
+                                /* if (order.isNull("lNumber"))
+                                                                        oneOrderSum_Int = oneOrderSum_Int;
+                                                                    else
+                                                                        oneOrderSum_Int = oneOrderSum_Int + order.getInt("lNumber");*/
                             }
                             oneOrderSum_String = String.valueOf(oneOrderSum_Int);
                         } catch (JSONException e1) {
@@ -160,7 +172,7 @@ public class ParseInfoActivity extends AppCompatActivity {
                         Map<String, String> item = new HashMap<String, String>();
                         item.put("note", note);
                         item.put("storeInfo", storeInfo);
-                        item.put("drinkNum", oneOrderSum_String); // "15"
+                        item.put("drinkNum", oneOrderSum_String); // 此訂單內的飲料數量
                         orderData.add(item);
                     }
                     Log.d("Debug", "XXXXXXOOOOOO2:" + totalJSONObjectToString); // For Check of Data

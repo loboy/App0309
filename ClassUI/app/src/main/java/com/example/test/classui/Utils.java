@@ -112,6 +112,34 @@ public class Utils {
         return null;
     }
 
+    // 將本機欲上傳的圖檔Uri 轉成 byte[]
+    public static byte[] uriToByte(Context context, Uri uri)
+    {
+        try {
+            InputStream is = context.getContentResolver().openInputStream(uri);
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            byte[] buffer = new byte[1024];
+            int len = 0;
+            // 將 InputStream 利用 buffer_byte[1024] 轉存入 ByteArrayOutputStream， 簡寫如下
+            while( (len=is.read(buffer)) != -1 ) // != -1 表示還有資料
+            {
+                baos.write(buffer, 0, len);
+            }
+            return  baos.toByteArray();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        //如果try-catch 偵測到錯誤
+        return null;
+    }
+
     // 轉成符合utf-8格式的Google API url
     public static String getGeocodeEncodeUrl(String address)
     {

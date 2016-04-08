@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -24,6 +25,11 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.parse.ParseException;
+import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.SaveCallback;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -242,6 +248,46 @@ public class MainActivity extends AppCompatActivity {
         //Toast.makeText(this, "Hello~Welcome!!!",Toast.LENGTH_LONG).show();
         String text = editText.getText().toString();   //宣告一個local variable text，值為EditText物件 editText的內容 (APP執行時，由使用者所輸入的內容)
         Toast.makeText(this, "Hello~Welcome:" + text ,Toast.LENGTH_LONG).show();
+
+        //處理將 訂單資訊上傳至 Parse Server上面! (相關系統設定請參考如何下載Parse Sever上的資料)
+        ParseObject orderParseObject = new ParseObject("Order"); // 指定要上傳至Parser Server上的哪個ParseObject
+        orderParseObject.put("note", text);
+        orderParseObject.put("storeInfo", spinner.getSelectedItem());
+        orderParseObject.put("menu", orderData);
+        //判斷是否需要處理上傳圖片
+        if(hasCameraPhoto)
+        {
+            Uri photoUri = Utils.getPhotoUri();
+            ParseFile photoParseFile = new ParseFile("Class_Camera_Photo.png", Utils.uriToByte(this, photoUri)); // Class_Camera_Photo.png 檔名如果跟 Uri.fromFile(cameraImageFile)的檔名不同的話是否OK?
+            orderParseObject.put("photo", photoParseFile);
+        }
+        else
+        {
+            Toast.makeText(this, "No need to upload Camera photo.",Toast.LENGTH_LONG).show();
+        }
+        //使用callback function 來得知上傳ParseObject是否順利!
+        orderParseObject.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if(e != null) //執行錯誤
+                {
+                    Toast.makeText(MainActivity.this, "Submit Failed.",Toast.LENGTH_LONG).show();
+                }
+                else        ////執行成功
+                {
+                    Toast.makeText(MainActivity.this, "Submit Success.",Toast.LENGTH_LONG).show();
+
+                    //還原畫面初始狀態
+                    cameraImageView.setImageResource(0);
+                    editText.setText("");
+                    //textView.setText("");
+                    hasCameraPhoto = false;
+                    //更新show history.txt
+                    showListView();
+                }
+            }
+        });
+
 
         textView.setText(text);  //將TextView物件textView內容改成 區域變數text的內容!
         editText.setText("");  //將EditText物件 editText的內容(使用者輸入的內容)清空

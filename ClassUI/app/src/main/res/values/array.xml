@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="storeNameList">
-        <item>台大一號店</item>
-        <item>台大二號店</item>
-        <item>台大三號店</item>
-        <item>台大四號店</item>
-        <item>台大五號店</item>
-        <item>台大六號店</item>
+        <item>台大一號店_COMEBUY,台北市羅斯福路四段1號</item>
+        <item>台大二號店_CoCo,台北市羅斯福路四段70-1號</item>
+        <item>台大三號店_綠蓋茶,台北市新生南路三段98號</item>
+        <item>台大四號店_50嵐,台北市羅斯福路三段345號</item>
+        <item>台大五號店_茶湯會,台北市羅斯福路三段286巷18號</item>
+        <item>台大六號店_歇腳亭,台北市羅斯福路四段1號</item>
     </string-array>
 </resources>

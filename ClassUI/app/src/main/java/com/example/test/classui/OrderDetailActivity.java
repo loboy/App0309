@@ -89,11 +89,15 @@ public class OrderDetailActivity extends AppCompatActivity {
             for (int i = 0; i < oneStoreOrderJSONArray.length(); i++) {
                 JSONObject order = oneStoreOrderJSONArray.getJSONObject(i);
 
-                // "Key" defined from JSONObject from Parse Server's Data : "name" & "l" & "m"
+                // "Key" defined from JSONObject from Parse Server's Data : "name"   ...
                 String name = order.getString("name");
-                String lNumber = String.valueOf(order.getInt("lNumber")); // l
-                String mNumber = String.valueOf(order.getInt("mNumber")); // m
-                orderText = orderText + "name:" + name + "\t\t" + "l:" + lNumber + "\t\t" + "m:" + mNumber + "\n"; //記錄所有訂單內容
+                String ice_s = String.valueOf(order.getInt("ice_s"));
+                String ice_m = String.valueOf(order.getInt("ice_m"));
+                String ice_l = String.valueOf(order.getInt("ice_l"));
+                String hot_s = String.valueOf(order.getInt("hot_s"));
+                String hot_m = String.valueOf(order.getInt("hot_m"));
+                String hot_l = String.valueOf(order.getInt("hot_l"));
+                orderText = orderText + "name:" + name + "\t\t" + "ice_s:" + ice_s + "\t\t" + "ice_m:" + ice_m + "\t\t" + "ice_l:" + ice_l + "\t\t" + "hot_s:" + hot_s + "\t\t" + "hot_m:" + hot_m + "\t\t" + "hot_l:" + hot_l + "\n"; //畫面中顯示訂單內容
             }
             menuDetail.setText(orderText);
         }
