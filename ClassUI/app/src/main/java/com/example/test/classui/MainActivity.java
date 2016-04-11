@@ -1,6 +1,7 @@
 package com.example.test.classui;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -54,6 +55,10 @@ public class MainActivity extends AppCompatActivity {
 
     // Show Camera Photo
     ImageView cameraImageView;
+
+    //Show Progress Status as Submit ( )
+    ProgressDialog submitProgessDialog;
+
 
     // For Store Test of orderData from DrinkMenuActivity
     String orderData;
@@ -109,6 +114,9 @@ public class MainActivity extends AppCompatActivity {
 
         // For relation with ImageView in XML
         cameraImageView = (ImageView) findViewById(R.id.cameraImageView);
+
+        // For initialization of ProgressDialog
+        submitProgessDialog = new ProgressDialog(this);
 
         // SharedPreferences偏好設定檔(自定名稱：setting；模式：應用程式專用)
         sp = getSharedPreferences("setting", Context.MODE_PRIVATE);
@@ -244,6 +252,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void submit(View view)
     {
+        // 彈出一視窗顯示 ProgressDialog訊息 // submitProgessDialog.show(this, "Data Trans.", "Data Processing: 資料處理中!");
+        submitProgessDialog.setTitle("Data Trans.");
+        submitProgessDialog.setMessage("Data Processing: 資料處理中!");
+        submitProgessDialog.show();
+
         //textView.setText("Hello~ Welcome!!!");
         //Toast.makeText(this, "Hello~Welcome!!!",Toast.LENGTH_LONG).show();
         String text = editText.getText().toString();   //宣告一個local variable text，值為EditText物件 editText的內容 (APP執行時，由使用者所輸入的內容)
@@ -269,6 +282,9 @@ public class MainActivity extends AppCompatActivity {
         orderParseObject.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
+                // 移除 顯示狀態中的ProgressDialog進度條
+                submitProgessDialog.dismiss();
+
                 if(e != null) //執行錯誤
                 {
                     Toast.makeText(MainActivity.this, "Submit Failed.",Toast.LENGTH_LONG).show();
