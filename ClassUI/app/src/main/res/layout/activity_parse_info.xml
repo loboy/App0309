@@ -22,5 +22,16 @@
         android:layout_height="wrap_content"
         android:id="@+id/orderRecordListView"
         android:layout_below="@+id/pStoreSpinner"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:visibility="gone" />
+
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/downloadProgressBar"
+        android:layout_below="@+id/pStoreSpinner"
+        android:layout_centerHorizontal="true"
+        android:indeterminate="false"
+        android:visibility="visible" />
 </RelativeLayout>

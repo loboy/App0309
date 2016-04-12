@@ -2,12 +2,14 @@ package com.example.test.classui;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -32,6 +34,9 @@ public class ParseInfoActivity extends AppCompatActivity {
     Spinner pStoreSpinner;  // 與.xml 的物件id 同名
     ListView orderRecordListView;
 
+    //Show ProgressBar
+    ProgressBar downloadProgressBar;
+
     // Global data
     List<ParseObject> orderQueryResults;
 
@@ -43,6 +48,9 @@ public class ParseInfoActivity extends AppCompatActivity {
 
         pStoreSpinner = (Spinner) findViewById(R.id.pStoreSpinner);
         orderRecordListView = (ListView) findViewById(R.id.orderRecordListView);
+        downloadProgressBar = (ProgressBar) findViewById(R.id.downloadProgressBar);
+        //downloadProgressBar.setVisibility(View.GONE); //初始化隱藏；也可於XML定義初始顯示狀態為隱藏 ==> 改成 XML中此ProgressBar為顯示，所以這邊就不要設成隱藏，因為待會執行showParseStore()也會再設為顯示!!!
+
         showParseStore(); //顯示ParseServer訂單總表於listView
 
         //For 取得使用者點擊listView清單的哪個項目的位置index
@@ -56,6 +64,13 @@ public class ParseInfoActivity extends AppCompatActivity {
 
     private void showParseStore()
     {
+        // 隱藏 ListView ; 顯示ProgressBar
+        orderRecordListView.setVisibility(View.GONE);
+        downloadProgressBar.setVisibility(View.VISIBLE);
+
+        // for Observation of ProgressBar
+        SystemClock.sleep(50); // 50ms
+
         //店家資訊
         // get ParseObject data , then get what we want and show it in Spinner
         ParseQuery<ParseObject> storeQuery = new ParseQuery<ParseObject>("StoreInfo");
@@ -184,10 +199,15 @@ public class ParseInfoActivity extends AppCompatActivity {
                     SimpleAdapter adapter = new SimpleAdapter(ParseInfoActivity.this, orderData, R.layout.order_overview_item, from, to);
 
                     orderRecordListView.setAdapter(adapter);
+
+                    // 隱藏ProgressBar ; 顯示ListView
+                    downloadProgressBar.setVisibility(View.GONE);
+                    orderRecordListView.setVisibility(View.VISIBLE);
                 }
             }
         });
-    }
+
+    } // End of  showParseStore( )
 
     public void goDetailOrder(int position)
     {

@@ -2,6 +2,7 @@ package com.example.test.classui;
 
 import android.app.Application;
 
+import com.facebook.FacebookSdk;
 import com.parse.Parse;
 
 /**
@@ -25,5 +26,8 @@ public class ClassUIApplication extends Application {
                     .server("http://parseserver-b3322-env.us-east-1.elasticbeanstalk.com/parse/") // 這邊的URL String 記得要以 / 結尾
                     .build()
         );
+
+        // For Facebook API Initialization
+        FacebookSdk.sdkInitialize(getApplicationContext());
     }
 }

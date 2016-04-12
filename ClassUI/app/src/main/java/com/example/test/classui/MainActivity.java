@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -23,6 +24,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,7 +59,9 @@ public class MainActivity extends AppCompatActivity {
     ImageView cameraImageView;
 
     //Show Progress Status as Submit ( )
-    ProgressDialog submitProgessDialog;
+    ProgressDialog submitProgressDialog;
+    //Show ProgressBar
+    ProgressBar submitProgressBar;
 
 
     // For Store Test of orderData from DrinkMenuActivity
@@ -116,7 +120,10 @@ public class MainActivity extends AppCompatActivity {
         cameraImageView = (ImageView) findViewById(R.id.cameraImageView);
 
         // For initialization of ProgressDialog
-        submitProgessDialog = new ProgressDialog(this);
+        submitProgressDialog = new ProgressDialog(this);
+        // For relation with ProgressBar in XML
+        submitProgressBar = (ProgressBar) findViewById(R.id.submitProgressBar);
+        submitProgressBar.setVisibility(View.GONE);
 
         // SharedPreferences偏好設定檔(自定名稱：setting；模式：應用程式專用)
         sp = getSharedPreferences("setting", Context.MODE_PRIVATE);
@@ -252,10 +259,15 @@ public class MainActivity extends AppCompatActivity {
 
     public void submit(View view)
     {
-        // 彈出一視窗顯示 ProgressDialog訊息 // submitProgessDialog.show(this, "Data Trans.", "Data Processing: 資料處理中!");
-        submitProgessDialog.setTitle("Data Trans.");
-        submitProgessDialog.setMessage("Data Processing: 資料處理中!");
-        submitProgessDialog.show();
+        // 彈出一視窗顯示 ProgressDialog訊息 // submitProgressDialog.show(this, "Data Trans.", "Data Processing: 資料處理中!");
+        submitProgressDialog.setTitle("Data Trans.");
+        submitProgressDialog.setMessage("Data Processing: 資料處理中!");
+        submitProgressDialog.show();
+        //顯示ProgressBar
+        submitProgressBar.setVisibility(View.VISIBLE);
+
+        // for Observation of ProgressBar
+        SystemClock.sleep(50); // 50ms
 
         //textView.setText("Hello~ Welcome!!!");
         //Toast.makeText(this, "Hello~Welcome!!!",Toast.LENGTH_LONG).show();
@@ -282,8 +294,10 @@ public class MainActivity extends AppCompatActivity {
         orderParseObject.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
-                // 移除 顯示狀態中的ProgressDialog進度條
-                submitProgessDialog.dismiss();
+                // 移除 顯示狀態中的ProgressDialog進度條 & ProgressBar
+                submitProgressDialog.dismiss();
+                submitProgressBar.setVisibility(View.GONE); // Object in XML
+
 
                 if(e != null) //執行錯誤
                 {
