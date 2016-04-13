@@ -63,6 +63,12 @@ public class MainActivity extends AppCompatActivity {
     //Show ProgressBar
     ProgressBar submitProgressBar;
 
+    //For Test Facebook SDK
+//    LoginButton loginButton;
+//    CallbackManager callbackManager;
+//    AccessToken accessToken;
+//    AccessTokenTracker accessTokenTracker;
+
 
     // For Store Test of orderData from DrinkMenuActivity
     String orderData;
@@ -99,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         Log.d("Debug", "MainActivity : 1 onCreate"); // for Trace of Activity Life-Cycle
 
@@ -199,6 +206,9 @@ public class MainActivity extends AppCompatActivity {
         //設定Spinner下拉式選單的內容
         showSpinner();
 
+        // 顯示FB 自己的name (or 聯絡人)
+        //        setFacebook();
+
 
         /*
         // For Parse Server
@@ -256,6 +266,71 @@ public class MainActivity extends AppCompatActivity {
     }
     // End for Trace of Activity Life-Cycle
 
+    // For Test Facebook SDK
+//    private void setFacebook()
+//    {
+//        callbackManager = CallbackManager.Factory.create();
+//        loginButton = (LoginButton)findViewById(R.id.loginButton);
+//        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+//            @Override
+//            public void onSuccess(LoginResult loginResult) {  // loginResult為Facebook給的憑證
+//                accessToken = loginResult.getAccessToken();
+//                GraphRequest request = GraphRequest.newGraphPathRequest(accessToken, "/v2.5/me", new GraphRequest.Callback()
+//                {
+//                    @Override
+//                    public void onCompleted(GraphResponse response)
+//                    {
+//                        JSONObject object = response.getJSONObject();
+//                        try
+//                        {
+//                            String name = object.getString("name");
+//                            Toast.makeText(MainActivity.this, "Hello! " + name, Toast.LENGTH_LONG).show();
+//                            textView.setText("Hello! " + name);
+//                        }
+//                        catch (JSONException e)
+//                        {
+//                            e.printStackTrace();
+//                        }
+//                        catch (Exception e)
+//                        {
+//                            e.printStackTrace();
+//                        }
+//                    }
+//                });
+//
+//                request.executeAsync(); // 執行方式是以executeAsync( )
+//            }
+//
+//            @Override
+//            public void onCancel()
+//            {
+//
+//            }
+//
+//            @Override
+//            public void onError(FacebookException error)
+//            {
+//
+//            }
+//
+//        });
+//
+//        accessTokenTracker = new AccessTokenTracker()
+//        {
+//            @Override
+//            protected void onCurrentAccessTokenChanged(AccessToken oldAccessToken, AccessToken currentAccessToken)
+//            {
+//                if (currentAccessToken == null)
+//                {
+//                    textView.setText("Hello World~");
+//                }
+//                else
+//                {
+//                    textView.setText("AccessToken Change");
+//                }
+//            }
+//        };
+//    }
 
     public void submit(View view)
     {
@@ -404,6 +479,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        //For Test Facebook SDK   Login Success
+        //        callbackManager.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode == REQUEST_CODE_MENU_ACTIVITY)  // 判斷requestCode是否為 goMenu按鈕所觸發的 startActivityForResult
         {

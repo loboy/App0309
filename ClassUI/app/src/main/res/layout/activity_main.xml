@@ -9,6 +9,12 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.example.test.classui.MainActivity">
 
+    <!--//手動新增Facebook Login Button & 調整textView layout_below-->
+    <!--<com.facebook.login.widget.LoginButton-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/fbLoginButton" />-->
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
